@@ -1,0 +1,15 @@
+{
+  "name": "track",
+  "version": "0.0.1",
+  "description": "rhq-metrics-middleware sample app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lance Ball <lanceball@gmail.com> (lanceball.com)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.10.6"
+  }
+}
