@@ -29,6 +29,7 @@ function responseTime(req, res, next) {
     var end = Date.now();
     rhq.post({id:'response-time', value:end-start, timestamp:end});
   });
+  next();
 }
 
 module.exports = metrics;
