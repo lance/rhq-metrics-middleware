@@ -71,48 +71,43 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li class="active"><a href="index.html">Main</a></li>
-            <li><a href="example/index.js.html">example/index.js</a></li>
-            <li><a href="index.js.html">index.js</a></li>
+            <li><a href="../index.html">Main</a></li>
+            <li class="active"><a href="../example/index.js.html">example/index.js</a></li>
+            <li><a href="../index.js.html">index.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#rhq"><i class="alert alert-success"></i><span>rhq</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="Main"><h1>rhq-metrics-middleware</h1>
-<p>Middleware for express and connect apps to inject system and site data into<br />rhq-metrics as timeseries data.</p><h2>Usage</h2>
-<pre><code>// load the RHQ middleware module
-var rhq = require(&#39;rhq-metrics-middleware&#39;);
+          <section id="rhq">
+            <h1>rhq</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">declaration</div><span>rhq</span>
+            </p>
+          </section>
+          <div class="description"> </div>
+          <pre><code class="language-javascript">var rhq = require('../');
 
-var express = require(&#39;express&#39;);
+var express = require('express');
 var app = express();
 
-app.set(&#39;port&#39;, 9000);
+app.set('port', 9000);
+app.use(rhq());
 
-// Use the rhq-metrics-middleware module.
-// By default the module will insert the following data:
-// load-1: 1 minute load average. See `os.loadavg()`
-// load-5: 5 minute load average. See `os.loadavg()`
-// load-15: 15 minute load average. See `os.loadavg()`
-// free-memory: Current free memory. See `os.freemem()`
-// response-time: Response time for the current request.
-app.use(rhq({
-  host: &#39;metricserver.mydomain.com&#39;, // default is localhost
-  port: 4567, // default is 8080
-  path: &#39;/rhq-metrics/metrics&#39; // default
-  }));
-
-app.get(&#39;/*&#39;, function(req, res) {
-  res.send(&#39;Well hello there&#39;);
+app.get('/*', function(req, res) {
+  res.send('Well hello there');
 });
 
 var server = app.listen(app.settings.port, function () {
-  var addr = server.address();
-  console.log(&#39;listening at http://%s:%s&#39;, addr.address, addr.port);
-});
-</code></pre></section>
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('listening at http://%s:%s', host, port);
+});</code></pre>
         </div>
       </div>
     </div>

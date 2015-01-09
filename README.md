@@ -3,6 +3,9 @@
 Middleware for express and connect apps to inject system and site data into
 rhq-metrics as timeseries data.
 
+## Documentation
+Docs can be found here: http://lanceball.com/rhq-metrics-middleware
+
 ## Usage
 
     // load the RHQ middleware module

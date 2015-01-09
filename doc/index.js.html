@@ -71,48 +71,75 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li class="active"><a href="index.html">Main</a></li>
+            <li><a href="index.html">Main</a></li>
             <li><a href="example/index.js.html">example/index.js</a></li>
-            <li><a href="index.js.html">index.js</a></li>
+            <li class="active"><a href="index.js.html">index.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#rhq"><i class="alert alert-info"></i><span>rhq</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="Main"><h1>rhq-metrics-middleware</h1>
-<p>Middleware for express and connect apps to inject system and site data into<br />rhq-metrics as timeseries data.</p><h2>Usage</h2>
-<pre><code>// load the RHQ middleware module
-var rhq = require(&#39;rhq-metrics-middleware&#39;);
+          <div class="description"><h1>rhq-metrics-middleware</h1>
+<p>Middleware for express and connect apps to inject system and site data into<br /><code>rhq-metrics</code> as timeseries data. See also: </p><p><a href="https://github.com/rhq-project/rhq-metrics">https://github.com/rhq-project/rhq-metrics</a><br /><a href="https://github.com/lance/rhq-metrics-js">https://github.com/lance/rhq-metrics-js</a></p><p><a href="example/index.js.html">Usage example</a></p> </div>
+          <section id="rhq">
+            <h1>rhq</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>rhq()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>opts</td>
+                <td>Object</td>
+                <td>RHQ server connection options</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Obtain the middleware functions for connect/express. See usage above.<br /><code>options.host</code> - the server hostname. Defaults to <code>&#39;localhost&#39;</code><br /><code>options.port</code> - the server port. Defaults to <code>8080</code><br /><code>options.path</code> - the REST API path. Defaults to <code>&#39;/rhq-metrics/metrics&#39;</code></p> </div>
+          <pre><code class="language-javascript">function rhq(opts) {
 
-var express = require(&#39;express&#39;);
-var app = express();
+  function loadAverage(req, res, next) {
+    var rhq = new RHQ(opts);
+    var load = os.loadavg();
+    var time = Date.now();
+    rhq.post([
+        {id:'load-1', value:load[0], timestamp:time},
+        {id:'load-5', value:load[1], timestamp:time},
+        {id:'load-15', value:load[2], timestamp:time}]);
+    next();
+  }
 
-app.set(&#39;port&#39;, 9000);
+  function freeMemory(req, res, next) {
+    var rhq = new RHQ(opts);
+    rhq.post({id:'free-memory', value:os.freemem(), timestamp:Date.now()});
+    next();
+  }
 
-// Use the rhq-metrics-middleware module.
-// By default the module will insert the following data:
-// load-1: 1 minute load average. See `os.loadavg()`
-// load-5: 5 minute load average. See `os.loadavg()`
-// load-15: 15 minute load average. See `os.loadavg()`
-// free-memory: Current free memory. See `os.freemem()`
-// response-time: Response time for the current request.
-app.use(rhq({
-  host: &#39;metricserver.mydomain.com&#39;, // default is localhost
-  port: 4567, // default is 8080
-  path: &#39;/rhq-metrics/metrics&#39; // default
-  }));
+  function responseTime(req, res, next) {
+    var rhq = new RHQ(opts);
+    var start = Date.now();
+    res.on('finish', function() {
+      var end = Date.now();
+      rhq.post({id:'response-time', value:end-start, timestamp:end});
+    });
+    next();
+  }
 
-app.get(&#39;/*&#39;, function(req, res) {
-  res.send(&#39;Well hello there&#39;);
-});
-
-var server = app.listen(app.settings.port, function () {
-  var addr = server.address();
-  console.log(&#39;listening at http://%s:%s&#39;, addr.address, addr.port);
-});
-</code></pre></section>
+  return [loadAverage, freeMemory, responseTime];
+}</code></pre>
         </div>
       </div>
     </div>

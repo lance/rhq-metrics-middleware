@@ -1,11 +1,15 @@
+// Load the rhq-metrics-middleware module
 var rhq = require('../');
 
+// Create an express app
 var express = require('express');
 var app = express();
-
 app.set('port', 9000);
+
+// Use rhq in the middleware
 app.use(rhq());
 
+// Boilerplate webserver
 app.get('/*', function(req, res) {
   res.send('Well hello there');
 });
