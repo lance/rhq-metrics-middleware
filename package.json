@@ -30,7 +30,9 @@
     "grunt-doxx": "^0.1.2",
     "grunt-gh-pages": "^0.9.1",
     "grunt-mocha-test": "^0.12.4",
+    "lodash": "^2.4.1",
     "mocha": "^2.0.1",
+    "nock": "^0.56.0",
     "rhq-metrics": "^0.1.3"
   }
 }

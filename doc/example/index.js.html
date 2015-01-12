@@ -77,28 +77,23 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#rhq"><i class="alert alert-success"></i><span>rhq</span></a>
-              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="rhq">
-            <h1>rhq</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">declaration</div><span>rhq</span>
-            </p>
-          </section>
           <div class="description"> </div>
-          <pre><code class="language-javascript">var rhq = require('../');
+          <pre><code class="language-javascript">// Load the rhq-metrics-middleware module
+var rhq = require('../');
 
+// Create an express app
 var express = require('express');
 var app = express();
-
 app.set('port', 9000);
+
+// Use rhq in the middleware
 app.use(rhq());
 
+// Boilerplate webserver
 app.get('/*', function(req, res) {
   res.send('Well hello there');
 });
